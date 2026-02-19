@@ -206,7 +206,8 @@ function initSpeech(){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;
   recog=new SR();recog.continuous=true;recog.interimResults=true;recog.lang='en-US';
   let final='';
-  recog.onresult=e=>{let interim='';for(let i=e.resultIndex;i<e.results.length;i++){if(e.results[i].isFinal)final+=e.results[i][0].transcript+' ';else interim=e.results[i][0].transcript;}transcript=final+interim;const ta=document.getElementById('transcriptTA');if(ta)ta.value=transcript;};
+  let autoGenTimer=null;
+  recog.onresult=e=>{let interim='';for(let i=e.resultIndex;i<e.results.length;i++){if(e.results[i].isFinal)final+=e.results[i][0].transcript+' ';else interim=e.results[i][0].transcript;}transcript=final+interim;const ta=document.getElementById('transcriptTA');if(ta)ta.value=transcript;updateGenBtn();clearTimeout(autoGenTimer);if(transcript.trim())autoGenTimer=setTimeout(()=>{if(transcript.trim())generate();},2500);};
   recog.onerror=()=>{listening=false;updateMicUI();};
   recog.onend=()=>{listening=false;updateMicUI();};
 }
@@ -217,7 +218,7 @@ function toggleMic(){
   updateMicUI();
 }
 
-function updateMicUI(){
+function updateGenBtn(){const btn=document.getElementById('genBtn');if(!btn)return;const can=!!transcript.trim();btn.disabled=!can;btn.style.background=can?'#ef5223':'#f0ece6';btn.style.color=can?'#fff':'#ccc';}
   const dot=document.getElementById('headerMicDot'),lbl=document.getElementById('headerMicLabel');
   if(dot)dot.className=listening?'mic-pulse live':'mic-pulse off';
   if(lbl){lbl.textContent=listening?'Live':'Idle';lbl.style.color=listening?'#ef5223':'rgba(255,255,255,.35)';}
