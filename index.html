@@ -42,13 +42,11 @@ textarea{resize:none}
 .tab-card{background:#f5f2ed;border-radius:4px;padding:12px 16px;margin-bottom:8px}
 .tab-card-title{font-size:14px;font-weight:700;color:#1a2340;font-family:'Inter',system-ui,sans-serif;margin-bottom:3px}
 .tab-card-desc{font-size:12px;color:#888;font-family:'Inter',system-ui,sans-serif;line-height:1.5}
-.key-banner{background:#fff8f6;border:1.5px solid #ef5223;border-radius:6px;padding:20px 24px;display:flex;flex-direction:column;gap:12px}
 </style>
 </head>
 <body>
 <div id="app">
 
-<!-- Help Modal -->
 <div id="helpModal" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeHelp()">
   <div class="modal">
     <div class="modal-header">
@@ -66,7 +64,7 @@ textarea{resize:none}
       <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:2px;font-family:'Inter',system-ui,sans-serif;margin-bottom:4px">Get Started in 3 Steps</div>
       <div class="step"><div class="step-num">1</div><div><div class="step-title">Pick your call type</div><div class="step-desc">Choose Sales Call, Interview, Client Call, Vendor Call, or Networking at the top of the Listen tab.</div></div></div>
       <div class="step"><div class="step-num">2</div><div><div class="step-title">Open it next to your Zoom call</div><div class="step-desc">Keep this app in a side window. Zoom on the left, this on the right works great.</div></div></div>
-      <div class="step"><div class="step-num">3</div><div><div class="step-title">Capture what they say, then generate</div><div class="step-desc">Hit <strong>🎙 Mic</strong> to listen. When they finish a thought, hit <strong>Generate Questions</strong>. You get 4 elite follow-up questions in seconds.</div></div></div>
+      <div class="step"><div class="step-num">3</div><div><div class="step-title">Capture what they say, then generate</div><div class="step-desc">Hit <strong>🎙 Mic</strong> to listen. Questions auto-generate after each pause, or hit <strong>Generate Questions</strong> manually anytime.</div></div></div>
       <div style="font-size:11px;font-weight:700;color:#aaa;text-transform:uppercase;letter-spacing:2px;font-family:'Inter',system-ui,sans-serif;margin:20px 0 10px">What Each Tab Does</div>
       <div class="tab-card"><div class="tab-card-title">🎙 Listen — During the call</div><div class="tab-card-desc">Real-time question generator. Pick call type, link a contact for memory, star your favorites.</div></div>
       <div class="tab-card"><div class="tab-card-title">📋 Prep — Before the call</div><div class="tab-card-desc">Get pain hypotheses, opener questions, what to listen for, and traps to avoid.</div></div>
@@ -78,36 +76,28 @@ textarea{resize:none}
   </div>
 </div>
 
-<!-- API Key Setup Modal -->
 <div id="keyModal" class="modal-overlay" style="display:none">
   <div class="modal">
     <div class="modal-body" style="padding:30px">
       <div style="font-size:20px;font-weight:700;color:#1a2340;font-family:'Georgia',serif;margin-bottom:6px">Enter your Anthropic API Key</div>
-      <div style="font-size:13px;color:#888;font-family:'Inter',system-ui,sans-serif;margin-bottom:20px;line-height:1.6">Your key is stored only in your browser (localStorage) and never sent anywhere except directly to Anthropic. Get your key at <a href="https://console.anthropic.com" target="_blank" style="color:#ef5223">console.anthropic.com</a></div>
+      <div style="font-size:13px;color:#888;font-family:'Inter',system-ui,sans-serif;margin-bottom:20px;line-height:1.6">Your key is stored only in your browser and never shared. Get it at <a href="https://console.anthropic.com" target="_blank" style="color:#ef5223">console.anthropic.com</a></div>
       <input id="keyInput" class="inp" placeholder="sk-ant-api03-..." style="margin-bottom:12px"/>
       <button onclick="saveKey()" class="primary-btn" style="width:100%">Save & Continue</button>
     </div>
   </div>
 </div>
 
-<!-- Header -->
 <div style="background:#1a2340;border-bottom:1px solid #0d1525;padding:0 28px">
   <div style="max-width:680px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 0">
-    <div style="display:flex;align-items:center;flex-shrink:0">
-      <img src="uniquelyseen4.png" alt="Uniquely Seen" style="height:47px;object-fit:contain;mix-blend-mode:lighten"/>
-    </div>
+    <img src="uniquelyseen4.png" alt="Uniquely Seen" style="height:47px;object-fit:contain;mix-blend-mode:lighten"/>
     <div style="display:flex;align-items:center;gap:16px">
       <div style="display:flex;align-items:center;gap:7px">
         <div id="headerMicDot" class="mic-pulse off"></div>
         <span id="headerMicLabel" style="font-size:11px;color:rgba(255,255,255,.35);font-family:'Inter',system-ui,sans-serif;letter-spacing:.8px;text-transform:uppercase">Idle</span>
       </div>
       <button onclick="document.getElementById('keyModal').style.display='flex'" style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:30px;color:rgba(255,255,255,.4);font-size:12px;font-family:'Inter',system-ui,sans-serif;padding:5px 12px">API Key</button>
-      <button onclick="openHelp()" style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:30px;color:#ddd;font-size:13px;font-family:'Inter',system-ui,sans-serif;font-weight:600;padding:6px 16px;letter-spacing:.2px">How it works?</button>
+      <button onclick="openHelp()" style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:30px;color:#ddd;font-size:13px;font-family:'Inter',system-ui,sans-serif;font-weight:600;padding:6px 16px">How it works?</button>
     </div>
-  </div>
-  <div id="logoUploadHint" style="padding:4px 0 8px;display:flex;align-items:center;gap:8px;max-width:680px;margin:0 auto">
-    <span style="font-size:10px;color:rgba(255,255,255,.25);font-family:'Inter',system-ui,sans-serif;text-transform:uppercase;letter-spacing:1px">Upload logo:</span>
-    <input type="file" accept="image/*" onchange="loadLogo(this)" style="font-size:11px;color:rgba(255,255,255,.35);font-family:'Inter',system-ui,sans-serif"/>
   </div>
   <div id="tabBar" style="display:flex;overflow-x:auto;max-width:680px;margin:0 auto;border-top:1px solid rgba(255,255,255,.08)"></div>
 </div>
@@ -120,11 +110,10 @@ let API_KEY = localStorage.getItem('us-apikey') || '';
 
 function saveKey() {
   const v = document.getElementById('keyInput').value.trim();
-  if (!v.startsWith('sk-')) { alert('That doesn\'t look like a valid key. It should start with sk-'); return; }
+  if (!v.startsWith('sk-')) { alert('That doesn\'t look right — it should start with sk-'); return; }
   API_KEY = v;
   localStorage.setItem('us-apikey', v);
   document.getElementById('keyModal').style.display = 'none';
-  render();
 }
 
 function checkKey() {
@@ -136,103 +125,113 @@ function checkKey() {
   return true;
 }
 
-let activeTab='Listen',ctx='Sales Call',transcript='',questions=[],listening=false,selContact=null;
-let favorites=JSON.parse(localStorage.getItem('us-favs')||'[]');
-let contacts=JSON.parse(localStorage.getItem('us-contacts')||'[]');
-let history=JSON.parse(localStorage.getItem('us-hist')||'[]');
-let pName='',pRole='',pCtx='Sales Call',pNotes='',pRes=null;
-let dNotes='',dRes=null;
-let showCF=false,editCId=null,cfN='',cfR='',cfS='',cfNt='';
-let recog=null;
-let logoDataUrl=localStorage.getItem('us-logo')||'';
+let activeTab='Listen', ctx='Sales Call', transcript='', questions=[], listening=false, selContact=null;
+let favorites = JSON.parse(localStorage.getItem('us-favs')||'[]');
+let contacts = JSON.parse(localStorage.getItem('us-contacts')||'[]');
+let history = JSON.parse(localStorage.getItem('us-hist')||'[]');
+let pName='', pRole='', pCtx='Sales Call', pNotes='', pRes=null;
+let dNotes='', dRes=null;
+let showCF=false, editCId=null, cfN='', cfR='', cfS='', cfNt='';
+let recog=null, autoGenTimer=null;
 
-const TABS=['Listen','Prep','Debrief','Contacts','Favorites'];
-const CONTEXTS={'Sales Call':{color:'#ef5223'},'Interview':{color:'#ef5223'},'Client Call':{color:'#ef5223'},'Vendor Call':{color:'#ef5223'},'Networking':{color:'#ef5223'}};
-const TYPE_COLORS={'Emotional':{accent:'#be185d'},'Strategic':{accent:'#ef5223'},'Deep Curious':{accent:'#1d4ed8'},'Reframe':{accent:'#15803d'},'Practical':{accent:'#b45309'}};
+const TABS = ['Listen','Prep','Debrief','Contacts','Favorites'];
+const CONTEXTS = {'Sales Call':{color:'#ef5223'},'Interview':{color:'#ef5223'},'Client Call':{color:'#ef5223'},'Vendor Call':{color:'#ef5223'},'Networking':{color:'#ef5223'}};
+const TYPE_COLORS = {'Emotional':{accent:'#be185d'},'Strategic':{accent:'#ef5223'},'Deep Curious':{accent:'#1d4ed8'},'Reframe':{accent:'#15803d'},'Practical':{accent:'#b45309'}};
 
-const CORE=`You are an elite communication and sales coach trained on:
-1. "Supercommunicators" by Duhigg: match conversation type (practical/emotional/social), loop for understanding, ask what/how not why, find the hidden story.
-2. "How to Know a Person" by David Brooks: Ask "What was it like?" Seek the underside of moments. Find the wound and the gift. Notice what lights them up vs what they rush past.
-3. "Never Split the Difference" by Voss: tactical empathy, labeling emotions, calibrated questions, mirroring, accusation audit.
-4. WIMP Junction & Pain-Finding: Find pain beneath the stated need. Pain hierarchy: surface→business→personal→hidden. Never present solutions until pain is fully felt.`;
+const CORE = `You are an elite communication and sales coach trained on:
+1. "Supercommunicators" by Duhigg: match conversation type, loop for understanding, ask what/how not why.
+2. "How to Know a Person" by David Brooks: Ask "What was it like?" Find the wound and the gift. Notice what lights them up.
+3. "Never Split the Difference" by Voss: tactical empathy, labeling emotions, calibrated questions, mirroring.
+4. WIMP Junction & Pain-Finding: Find pain beneath the stated need. Never present solutions until pain is fully felt.`;
 
-const PREP_SYS=CORE+`\nPre-call strategist. Output ONLY valid JSON, no markdown:\n{"contextBrief":"...","painHypotheses":["..."],"whatToListenFor":["..."],"openers":[{"question":"...","type":"...","why":"..."},{"question":"...","type":"...","why":"..."},{"question":"...","type":"...","why":"..."}],"painQuestions":["...","...","..."],"watchOuts":["..."],"oneGoal":"..."}`;
-const DEBRIEF_SYS=CORE+`\nPost-call coach. Output ONLY valid JSON, no markdown:\n{"rapportScore":7,"rapportNote":"...","painUncovered":"...","missedMoments":["..."],"trustBuilders":["..."],"trustBreakers":["..."],"whatTheyReallyMeant":"...","conversationTypeShifts":"...","blindSpots":["..."],"nextTimeActions":["..."],"followUpQuestions":["..."],"contactUpdates":{"style":"...","notes":"..."}}`;
+const PREP_SYS = CORE+`\nPre-call strategist. Output ONLY valid JSON, no markdown:\n{"contextBrief":"...","painHypotheses":["..."],"whatToListenFor":["..."],"openers":[{"question":"...","type":"...","why":"..."},{"question":"...","type":"...","why":"..."},{"question":"...","type":"...","why":"..."}],"painQuestions":["...","...","..."],"watchOuts":["..."],"oneGoal":"..."}`;
+const DEBRIEF_SYS = CORE+`\nPost-call coach. Output ONLY valid JSON, no markdown:\n{"rapportScore":7,"rapportNote":"...","painUncovered":"...","missedMoments":["..."],"trustBuilders":["..."],"trustBreakers":["..."],"whatTheyReallyMeant":"...","conversationTypeShifts":"...","blindSpots":["..."],"nextTimeActions":["..."],"followUpQuestions":["..."],"contactUpdates":{"style":"...","notes":"..."}}`;
 
-function buildListenSys(c){
-  const contact=contacts.find(x=>x.id===selContact);
-  const mem=contact?`\nContact: ${contact.name}, ${contact.role||''}. Style: ${contact.style||'unknown'}. Notes: ${contact.notes||'none'}. Last call: ${contact.lastCall||'none'}.`:'';
+function buildListenSys(c) {
+  const contact = contacts.find(x => x.id === selContact);
+  const mem = contact ? `\nContact: ${contact.name}, ${contact.role||''}. Style: ${contact.style||'unknown'}. Notes: ${contact.notes||'none'}.` : '';
   return CORE+mem+`\nContext: ${c}.\nGenerate 4 elite follow-up questions. Output ONLY valid JSON array, no markdown:\n[{"question":"...","type":"Emotional","why":"..."},{"question":"...","type":"Strategic","why":"..."},{"question":"...","type":"Deep Curious","why":"..."},{"question":"...","type":"Reframe","why":"..."}]`;
 }
 
-function persist(){localStorage.setItem('us-favs',JSON.stringify(favorites));localStorage.setItem('us-contacts',JSON.stringify(contacts));localStorage.setItem('us-hist',JSON.stringify(history));}
+function persist() { localStorage.setItem('us-favs',JSON.stringify(favorites)); localStorage.setItem('us-contacts',JSON.stringify(contacts)); localStorage.setItem('us-hist',JSON.stringify(history)); }
 
 async function callAI(system, userMsg) {
   if (!checkKey()) return null;
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': API_KEY,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true'
-    },
-    body: JSON.stringify({ model: 'claude-opus-4-6', max_tokens: 1400, system, messages: [{ role: 'user', content: userMsg }] })
+    headers: { 'Content-Type':'application/json', 'x-api-key':API_KEY, 'anthropic-version':'2023-06-01', 'anthropic-dangerous-direct-browser-access':'true' },
+    body: JSON.stringify({ model:'claude-opus-4-6', max_tokens:1400, system, messages:[{role:'user',content:userMsg}] })
   });
   const d = await r.json();
-  if (d.error) throw new Error(typeof d.error === 'string' ? d.error : d.error.message || JSON.stringify(d.error));
+  if (d.error) throw new Error(typeof d.error==='string' ? d.error : d.error.message || JSON.stringify(d.error));
   return d.content?.[0]?.text || '';
 }
 
-function parseJ(raw){return JSON.parse(raw.replace(/```json|```/g,'').trim());}
-function openHelp(){document.getElementById('helpModal').style.display='flex';}
-function closeHelp(){document.getElementById('helpModal').style.display='none';}
+function parseJ(raw) { return JSON.parse(raw.replace(/```json|```/g,'').trim()); }
+function openHelp() { document.getElementById('helpModal').style.display='flex'; }
+function closeHelp() { document.getElementById('helpModal').style.display='none'; }
 
-function loadLogo(input){
-  const file=input.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=e=>{logoDataUrl=e.target.result;localStorage.setItem('us-logo',logoDataUrl);applyLogo();};
-  reader.readAsDataURL(file);
-}
-function applyLogo(){
-  if(!logoDataUrl)return;
-  const img=document.getElementById('logoImg'),txt=document.getElementById('logoText'),hint=document.getElementById('logoUploadHint');
-  if(img){img.src=logoDataUrl;img.style.display='block';}
-  if(txt)txt.style.display='none';
-  if(hint)hint.style.display='none';
+function updateGenBtn() {
+  const btn = document.getElementById('genBtn');
+  if (!btn) return;
+  const can = !!transcript.trim();
+  btn.disabled = !can;
+  btn.style.background = can ? '#ef5223' : '#f0ece6';
+  btn.style.color = can ? '#fff' : '#ccc';
 }
 
-function initSpeech(){
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return;
-  recog=new SR();recog.continuous=true;recog.interimResults=true;recog.lang='en-US';
-  let final='';
-  let autoGenTimer=null;
-  recog.onresult=e=>{let interim='';for(let i=e.resultIndex;i<e.results.length;i++){if(e.results[i].isFinal)final+=e.results[i][0].transcript+' ';else interim=e.results[i][0].transcript;}transcript=final+interim;const ta=document.getElementById('transcriptTA');if(ta)ta.value=transcript;updateGenBtn();clearTimeout(autoGenTimer);if(transcript.trim())autoGenTimer=setTimeout(()=>{if(transcript.trim())generate();},2500);};
-  recog.onerror=()=>{listening=false;updateMicUI();};
-  recog.onend=()=>{listening=false;updateMicUI();};
+function initSpeech() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return;
+  recog = new SR();
+  recog.continuous = true;
+  recog.interimResults = true;
+  recog.lang = 'en-US';
+  let final = '';
+  recog.onresult = e => {
+    let interim = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (e.results[i].isFinal) final += e.results[i][0].transcript + ' ';
+      else interim = e.results[i][0].transcript;
+    }
+    transcript = final + interim;
+    const ta = document.getElementById('transcriptTA');
+    if (ta) ta.value = transcript;
+    updateGenBtn();
+    clearTimeout(autoGenTimer);
+    if (transcript.trim()) autoGenTimer = setTimeout(() => { if (transcript.trim()) generate(); }, 2500);
+  };
+  recog.onerror = () => { listening = false; updateMicUI(); };
+  recog.onend = () => { listening = false; updateMicUI(); };
 }
 
-function toggleMic(){
-  if(!recog){alert('Use Chrome for mic support.');return;}
-  if(listening){recog.stop();listening=false;}else{recog.start();listening=true;}
+function toggleMic() {
+  if (!recog) { alert('Use Chrome for mic support.'); return; }
+  if (listening) { recog.stop(); listening = false; }
+  else { recog.start(); listening = true; }
   updateMicUI();
 }
 
-function updateGenBtn(){const btn=document.getElementById('genBtn');if(!btn)return;const can=!!transcript.trim();btn.disabled=!can;btn.style.background=can?'#ef5223':'#f0ece6';btn.style.color=can?'#fff':'#ccc';}
-  const dot=document.getElementById('headerMicDot'),lbl=document.getElementById('headerMicLabel');
-  if(dot)dot.className=listening?'mic-pulse live':'mic-pulse off';
-  if(lbl){lbl.textContent=listening?'Live':'Idle';lbl.style.color=listening?'#ef5223':'rgba(255,255,255,.35)';}
-  const btn=document.getElementById('micBtn');
-  if(btn){btn.className=listening?'mic-btn active':'mic-btn';const pd=btn.querySelector('.mic-pulse'),mt=btn.querySelector('.mic-text');if(pd)pd.className=listening?'mic-pulse live':'mic-pulse off';if(mt)mt.textContent=listening?'Stop':'Mic';}
+function updateMicUI() {
+  const dot = document.getElementById('headerMicDot'), lbl = document.getElementById('headerMicLabel');
+  if (dot) dot.className = listening ? 'mic-pulse live' : 'mic-pulse off';
+  if (lbl) { lbl.textContent = listening ? 'Live' : 'Idle'; lbl.style.color = listening ? '#ef5223' : 'rgba(255,255,255,.35)'; }
+  const btn = document.getElementById('micBtn');
+  if (btn) {
+    btn.className = listening ? 'mic-btn active' : 'mic-btn';
+    const pd = btn.querySelector('.mic-pulse'), mt = btn.querySelector('.mic-text');
+    if (pd) pd.className = listening ? 'mic-pulse live' : 'mic-pulse off';
+    if (mt) mt.textContent = listening ? 'Stop' : 'Mic';
+  }
 }
 
-function ctxBtns(current,fn){return Object.entries(CONTEXTS).map(([k,v])=>{const a=current===k;return`<button class="ctx-btn" onclick="${fn}('${k}')" style="border:1.5px solid ${a?v.color:'#e0dbd4'};background:${a?v.color:'#fff'};color:${a?'#fff':'#888'}">${k}</button>`;}).join('');}
-function escQ(s){return(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');}
+function ctxBtns(current, fn) { return Object.entries(CONTEXTS).map(([k,v]) => { const a = current===k; return `<button class="ctx-btn" onclick="${fn}('${k}')" style="border:1.5px solid ${a?v.color:'#e0dbd4'};background:${a?v.color:'#fff'};color:${a?'#fff':'#888'}">${k}</button>`; }).join(''); }
+function escQ(s) { return (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
 
-function qCard(q,idx,prefix=''){
-  const st=TYPE_COLORS[q.type]||TYPE_COLORS['Practical'];
-  const saved=favorites.some(f=>f.question===q.question);
-  return`<div class="qcard">
+function qCard(q, idx, prefix='') {
+  const st = TYPE_COLORS[q.type] || TYPE_COLORS['Practical'];
+  const saved = favorites.some(f => f.question===q.question);
+  return `<div class="qcard">
     <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
       <span style="font-size:11px;font-weight:700;color:${st.accent};text-transform:uppercase;letter-spacing:1.5px;font-family:'Inter',system-ui,sans-serif">${q.type}</span>
       <div style="flex:1;height:1px;background:#f0ece6"></div>
@@ -240,159 +239,200 @@ function qCard(q,idx,prefix=''){
       <button onclick="copyQ('${escQ(q.question)}','${prefix+idx}')" id="cpbtn${prefix+idx}" style="background:none;font-size:12px;color:#bbb;font-family:'Inter',system-ui,sans-serif">copy</button>
     </div>
     <div style="font-size:17px;color:#1a2340;line-height:1.6;font-family:'Georgia',serif;font-style:italic">"${q.question}"</div>
-    ${q.why?`<div style="font-size:12px;color:#aaa;margin-top:10px;line-height:1.5;font-family:'Inter',system-ui,sans-serif;border-top:1px solid #f5f2ed;padding-top:10px">${q.why}</div>`:''}
+    ${q.why ? `<div style="font-size:12px;color:#aaa;margin-top:10px;line-height:1.5;font-family:'Inter',system-ui,sans-serif;border-top:1px solid #f5f2ed;padding-top:10px">${q.why}</div>` : ''}
   </div>`;
 }
 
-function sec(title,inner){return`<div class="sec"><div class="sec-title">${title}</div>${inner}</div>`;}
-function pills(arr){return`<div style="display:flex;flex-direction:column;gap:7px">${(arr||[]).map(a=>`<div class="pill">${a}</div>`).join('')}</div>`;}
-function copyQ(text,idx){navigator.clipboard.writeText(text);const btn=document.getElementById('cpbtn'+idx);if(btn){btn.textContent='✓';btn.style.color='#ef5223';setTimeout(()=>{btn.textContent='copy';btn.style.color='#bbb';},1500);}}
+function sec(title, inner) { return `<div class="sec"><div class="sec-title">${title}</div>${inner}</div>`; }
+function pills(arr) { return `<div style="display:flex;flex-direction:column;gap:7px">${(arr||[]).map(a=>`<div class="pill">${a}</div>`).join('')}</div>`; }
 
-function toggleFav(prefix,idx){
-  let q=prefix==='p'?(pRes?.openers||[])[idx]:questions[idx];if(!q)return;
-  const ex=favorites.findIndex(f=>f.question===q.question);
-  if(ex>=0)favorites.splice(ex,1);else favorites.push({...q,ctx,savedAt:Date.now()});
-  persist();render();
+function copyQ(text, idx) {
+  navigator.clipboard.writeText(text);
+  const btn = document.getElementById('cpbtn'+idx);
+  if (btn) { btn.textContent='✓'; btn.style.color='#ef5223'; setTimeout(()=>{ btn.textContent='copy'; btn.style.color='#bbb'; }, 1500); }
 }
 
-function setCtx(c){ctx=c;render();}
-function setPCtx(c){pCtx=c;render();}
+function toggleFav(prefix, idx) {
+  let q = prefix==='p' ? (pRes?.openers||[])[idx] : questions[idx];
+  if (!q) return;
+  const ex = favorites.findIndex(f => f.question===q.question);
+  if (ex>=0) favorites.splice(ex,1); else favorites.push({...q, ctx, savedAt:Date.now()});
+  persist(); render();
+}
 
-async function generate(){
-  const ta=document.getElementById('transcriptTA');if(ta)transcript=ta.value;
-  if(!transcript.trim())return;
-  const btn=document.getElementById('genBtn');if(btn){btn.textContent='Thinking…';btn.disabled=true;}
-  try{const raw=await callAI(buildListenSys(ctx),`The other person just said: "${transcript.trim()}"`);if(!raw)return;questions=parseJ(raw);history.unshift({ctx,snippet:transcript.trim().slice(0,80),qs:questions,ts:Date.now()});if(history.length>10)history.pop();persist();}
-  catch(e){alert('Error: '+e.message);}
+function setCtx(c) { ctx=c; render(); }
+function setPCtx(c) { pCtx=c; render(); }
+
+async function generate() {
+  const ta = document.getElementById('transcriptTA');
+  if (ta) transcript = ta.value;
+  if (!transcript.trim()) return;
+  const btn = document.getElementById('genBtn');
+  if (btn) { btn.textContent='Thinking…'; btn.disabled=true; }
+  try {
+    const raw = await callAI(buildListenSys(ctx), `The other person just said: "${transcript.trim()}"`);
+    if (!raw) return;
+    questions = parseJ(raw);
+    history.unshift({ctx, snippet:transcript.trim().slice(0,80), qs:questions, ts:Date.now()});
+    if (history.length>10) history.pop();
+    persist();
+  } catch(e) { alert('Error: '+e.message); }
   render();
 }
 
-async function genPrep(){
-  pName=document.getElementById('pNameI')?.value||pName;pRole=document.getElementById('pRoleI')?.value||pRole;pNotes=document.getElementById('pNotesI')?.value||pNotes;
-  if(!pName.trim())return;
-  const btn=document.getElementById('prepBtn');if(btn){btn.textContent='Building…';btn.disabled=true;}
-  try{const c=contacts.find(x=>x.name.toLowerCase()===pName.toLowerCase());const mem=c?`Known: style=${c.style}, notes=${c.notes}`:'';const raw=await callAI(PREP_SYS,`Person: ${pName}, Role: ${pRole}. Call: ${pCtx}. Info: ${pNotes}. ${mem}`);if(!raw)return;pRes=parseJ(raw);}
-  catch(e){alert('Error: '+e.message);}
+async function genPrep() {
+  pName = document.getElementById('pNameI')?.value || pName;
+  pRole = document.getElementById('pRoleI')?.value || pRole;
+  pNotes = document.getElementById('pNotesI')?.value || pNotes;
+  if (!pName.trim()) return;
+  const btn = document.getElementById('prepBtn');
+  if (btn) { btn.textContent='Building…'; btn.disabled=true; }
+  try {
+    const c = contacts.find(x => x.name.toLowerCase()===pName.toLowerCase());
+    const mem = c ? `Known: style=${c.style}, notes=${c.notes}` : '';
+    const raw = await callAI(PREP_SYS, `Person: ${pName}, Role: ${pRole}. Call: ${pCtx}. Info: ${pNotes}. ${mem}`);
+    if (!raw) return;
+    pRes = parseJ(raw);
+  } catch(e) { alert('Error: '+e.message); }
   render();
 }
 
-async function genDebrief(){
-  const ta=document.getElementById('dNotesTA');if(ta)dNotes=ta.value;
-  if(!dNotes.trim())return;
-  const btn=document.getElementById('debriefBtn');if(btn){btn.textContent='Analyzing…';btn.disabled=true;}
-  try{const raw=await callAI(DEBRIEF_SYS,`Call notes: ${dNotes}`);if(!raw)return;dRes=parseJ(raw);const sel=document.getElementById('dContactSel');const dcId=sel?Number(sel.value):null;if(dcId&&dRes.contactUpdates){contacts=contacts.map(c=>c.id===dcId?{...c,style:dRes.contactUpdates.style||c.style,notes:(c.notes?c.notes+' | ':'')+dRes.contactUpdates.notes,lastCall:new Date().toLocaleDateString()}:c);persist();}}
-  catch(e){alert('Error: '+e.message);}
+async function genDebrief() {
+  const ta = document.getElementById('dNotesTA');
+  if (ta) dNotes = ta.value;
+  if (!dNotes.trim()) return;
+  const btn = document.getElementById('debriefBtn');
+  if (btn) { btn.textContent='Analyzing…'; btn.disabled=true; }
+  try {
+    const raw = await callAI(DEBRIEF_SYS, `Call notes: ${dNotes}`);
+    if (!raw) return;
+    dRes = parseJ(raw);
+    const sel = document.getElementById('dContactSel');
+    const dcId = sel ? Number(sel.value) : null;
+    if (dcId && dRes.contactUpdates) {
+      contacts = contacts.map(c => c.id===dcId ? {...c, style:dRes.contactUpdates.style||c.style, notes:(c.notes?c.notes+' | ':'')+dRes.contactUpdates.notes, lastCall:new Date().toLocaleDateString()} : c);
+      persist();
+    }
+  } catch(e) { alert('Error: '+e.message); }
   render();
 }
 
-function loadContactToPrep(id){const c=contacts.find(x=>x.id===Number(id));if(!c)return;pName=c.name;pRole=c.role||'';pNotes=c.notes||'';render();}
-function saveCF(){cfN=document.getElementById('cfNI')?.value||cfN;cfR=document.getElementById('cfRI')?.value||cfR;cfS=document.getElementById('cfSI')?.value||cfS;cfNt=document.getElementById('cfNtI')?.value||cfNt;if(!cfN.trim())return;if(editCId)contacts=contacts.map(c=>c.id===editCId?{...c,name:cfN,role:cfR,style:cfS,notes:cfNt}:c);else contacts.push({id:Date.now(),name:cfN,role:cfR,style:cfS,notes:cfNt,lastCall:null});cfN='';cfR='';cfS='';cfNt='';showCF=false;editCId=null;persist();render();}
-function startEdit(id){const c=contacts.find(x=>x.id===id);if(!c)return;editCId=id;cfN=c.name;cfR=c.role||'';cfS=c.style||'';cfNt=c.notes||'';showCF=true;render();}
-function deleteContact(id){contacts=contacts.filter(c=>c.id!==id);persist();render();}
-function deleteFavByIdx(i){favorites.splice(i,1);persist();render();}
-function clearFavs(){favorites=[];persist();render();}
-function cancelCF(){showCF=false;editCId=null;render();}
+function loadContactToPrep(id) { const c=contacts.find(x=>x.id===Number(id)); if(!c)return; pName=c.name; pRole=c.role||''; pNotes=c.notes||''; render(); }
+function saveCF() { cfN=document.getElementById('cfNI')?.value||cfN; cfR=document.getElementById('cfRI')?.value||cfR; cfS=document.getElementById('cfSI')?.value||cfS; cfNt=document.getElementById('cfNtI')?.value||cfNt; if(!cfN.trim())return; if(editCId)contacts=contacts.map(c=>c.id===editCId?{...c,name:cfN,role:cfR,style:cfS,notes:cfNt}:c);else contacts.push({id:Date.now(),name:cfN,role:cfR,style:cfS,notes:cfNt,lastCall:null}); cfN='';cfR='';cfS='';cfNt='';showCF=false;editCId=null;persist();render(); }
+function startEdit(id) { const c=contacts.find(x=>x.id===id); if(!c)return; editCId=id;cfN=c.name;cfR=c.role||'';cfS=c.style||'';cfNt=c.notes||'';showCF=true;render(); }
+function deleteContact(id) { contacts=contacts.filter(c=>c.id!==id); persist(); render(); }
+function deleteFavByIdx(i) { favorites.splice(i,1); persist(); render(); }
+function clearFavs() { favorites=[]; persist(); render(); }
+function cancelCF() { showCF=false; editCId=null; render(); }
 
-function renderListen(){
-  const contactOpts=contacts.map(c=>`<option value="${c.id}" ${selContact==c.id?'selected':''}>${c.name}</option>`).join('');
-  const canGen=!!transcript.trim();
-  let html=`
+function renderListen() {
+  const contactOpts = contacts.map(c=>`<option value="${c.id}" ${selContact==c.id?'selected':''}>${c.name}</option>`).join('');
+  const canGen = !!transcript.trim();
+  let html = `
     <div style="display:flex;gap:7px;flex-wrap:wrap">${ctxBtns(ctx,'setCtx')}</div>
     <div style="display:flex;align-items:center;gap:12px">
       <span style="font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:1px;font-family:'Inter',system-ui,sans-serif">Contact</span>
       <select onchange="selContact=this.value||null;render()" style="background:#fff;border:1px solid #e0dbd4;border-radius:3px;color:#555;font-size:13px;padding:5px 10px;outline:none;font-family:'Inter',system-ui,sans-serif">
         <option value="">None</option>${contactOpts}
       </select>
-      ${selContact?`<span style="font-size:11px;padding:3px 10px;border-radius:2px;background:#ef522318;color:#ef5223;font-weight:600;font-family:'Inter',system-ui,sans-serif;letter-spacing:.5px;text-transform:uppercase">Memory Active</span>`:''}
+      ${selContact ? `<span style="font-size:11px;padding:3px 10px;border-radius:2px;background:#ef522318;color:#ef5223;font-weight:600;font-family:'Inter',system-ui,sans-serif;text-transform:uppercase">Memory Active</span>` : ''}
     </div>
     <div style="background:#fff;border-radius:4px;padding:18px 20px;border:1px solid #e8e4de">
       <div style="font-size:11px;color:#aaa;margin-bottom:10px;text-transform:uppercase;letter-spacing:2px;font-family:'Inter',system-ui,sans-serif">What They're Saying</div>
-      <textarea id="transcriptTA" rows="4" placeholder="Hit Mic — or paste/type what they said." oninput="transcript=this.value" style="width:100%;background:transparent;border:none;color:#1a2340;font-size:15px;line-height:1.7;resize:none;outline:none;font-family:'Georgia',serif">${transcript}</textarea>
+      <textarea id="transcriptTA" rows="4" placeholder="Hit Mic — or paste/type what they said." oninput="transcript=this.value;updateGenBtn()" style="width:100%;background:transparent;border:none;color:#1a2340;font-size:15px;line-height:1.7;resize:none;outline:none;font-family:'Georgia',serif">${transcript}</textarea>
       <div style="display:flex;gap:9px;margin-top:14px;padding-top:14px;border-top:1px solid #f5f2ed">
         <button id="micBtn" onclick="toggleMic()" class="${listening?'mic-btn active':'mic-btn'}">
           <div class="${listening?'mic-pulse live':'mic-pulse off'}"></div>
           <span class="mic-text">${listening?'Stop':'Mic'}</span>
         </button>
-        <button onclick="transcript='';if(document.getElementById('transcriptTA'))document.getElementById('transcriptTA').value=''" style="padding:10px 16px;border-radius:3px;border:1px solid #e0dbd4;background:#fff;color:#aaa;font-family:'Inter',system-ui,sans-serif;font-size:14px">Clear</button>
+        <button onclick="transcript='';const ta=document.getElementById('transcriptTA');if(ta)ta.value='';updateGenBtn()" style="padding:10px 16px;border-radius:3px;border:1px solid #e0dbd4;background:#fff;color:#aaa;font-family:'Inter',system-ui,sans-serif;font-size:14px">Clear</button>
         <button id="genBtn" onclick="generate()" ${canGen?'':'disabled'} style="flex:1;padding:10px 0;border-radius:3px;border:none;background:${canGen?'#ef5223':'#f0ece6'};color:${canGen?'#fff':'#ccc'};font-size:15px;font-weight:600;font-family:'Inter',system-ui,sans-serif">Generate Questions</button>
       </div>
     </div>`;
-  if(questions.length>0){html+=`<div style="font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:2px;font-family:'Inter',system-ui,sans-serif;margin-top:4px">Ask One of These</div>`;html+=questions.map((q,i)=>qCard(q,i,'')).join('');}
+  if (questions.length>0) {
+    html += `<div style="font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:2px;font-family:'Inter',system-ui,sans-serif;margin-top:4px">Ask One of These</div>`;
+    html += questions.map((q,i) => qCard(q,i,'')).join('');
+  }
   return html;
 }
 
-function renderPrep(){
-  const contactOpts=contacts.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
-  let html=sec('Who Are You Meeting?',`<div style="display:flex;flex-direction:column;gap:11px">
+function renderPrep() {
+  const contactOpts = contacts.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+  let html = sec('Who Are You Meeting?', `<div style="display:flex;flex-direction:column;gap:11px">
     <input id="pNameI" class="inp" value="${pName.replace(/"/g,'&quot;')}" placeholder="Name" oninput="pName=this.value"/>
-    ${contacts.length>0?`<select onchange="loadContactToPrep(this.value)" style="background:#fff;border:1px solid #e0dbd4;border-radius:4px;color:#888;font-size:14px;padding:10px 13px;outline:none;font-family:'Inter',system-ui,sans-serif"><option value="">Load from contacts…</option>${contactOpts}</select>`:''}
+    ${contacts.length>0 ? `<select onchange="loadContactToPrep(this.value)" style="background:#fff;border:1px solid #e0dbd4;border-radius:4px;color:#888;font-size:14px;padding:10px 13px;outline:none;font-family:'Inter',system-ui,sans-serif"><option value="">Load from contacts…</option>${contactOpts}</select>` : ''}
     <input id="pRoleI" class="inp" value="${pRole.replace(/"/g,'&quot;')}" placeholder="Their role / company" oninput="pRole=this.value"/>
     <div style="display:flex;gap:7px;flex-wrap:wrap">${ctxBtns(pCtx,'setPCtx')}</div>
     <textarea id="pNotesI" class="inp" rows="3" placeholder="What do you know? What's your goal for this call?" oninput="pNotes=this.value">${pNotes}</textarea>
     <button id="prepBtn" class="primary-btn" onclick="genPrep()" ${!pName.trim()?'disabled':''}>Generate Prep Brief</button>
   </div>`);
-  if(pRes){
-    html+=sec('One Goal',`<div style="font-size:17px;color:#1a2340;line-height:1.6;font-family:'Georgia',serif">${pRes.oneGoal}</div>`);
-    html+=sec('Context Brief',`<div style="font-size:14px;color:#555;line-height:1.8;font-family:'Inter',system-ui,sans-serif">${pRes.contextBrief}</div>`);
-    if(pRes.painHypotheses?.length)html+=sec('Pain Hypotheses',pills(pRes.painHypotheses.map(p=>'→ '+p)));
-    html+=sec('What to Listen For',pills((pRes.whatToListenFor||[]).map(w=>'→ '+w)));
-    html+=sec('Opener Questions',`<div style="display:flex;flex-direction:column;gap:11px">${(pRes.openers||[]).map((q,i)=>qCard(q,i,'p')).join('')}</div>`);
-    if(pRes.painQuestions?.length)html+=sec('Pain Discovery Questions',pills(pRes.painQuestions.map(q=>'? '+q)));
-    html+=sec('Watch Outs',pills((pRes.watchOuts||[]).map(w=>'⚡ '+w)));
+  if (pRes) {
+    html += sec('One Goal', `<div style="font-size:17px;color:#1a2340;line-height:1.6;font-family:'Georgia',serif">${pRes.oneGoal}</div>`);
+    html += sec('Context Brief', `<div style="font-size:14px;color:#555;line-height:1.8;font-family:'Inter',system-ui,sans-serif">${pRes.contextBrief}</div>`);
+    if (pRes.painHypotheses?.length) html += sec('Pain Hypotheses', pills(pRes.painHypotheses.map(p=>'→ '+p)));
+    html += sec('What to Listen For', pills((pRes.whatToListenFor||[]).map(w=>'→ '+w)));
+    html += sec('Opener Questions', `<div style="display:flex;flex-direction:column;gap:11px">${(pRes.openers||[]).map((q,i)=>qCard(q,i,'p')).join('')}</div>`);
+    if (pRes.painQuestions?.length) html += sec('Pain Discovery Questions', pills(pRes.painQuestions.map(q=>'? '+q)));
+    html += sec('Watch Outs', pills((pRes.watchOuts||[]).map(w=>'⚡ '+w)));
   }
   return html;
 }
 
-function renderDebrief(){
-  const contactOpts=contacts.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
-  let html=sec('Call Notes / Transcript',`<div style="display:flex;flex-direction:column;gap:11px">
+function renderDebrief() {
+  const contactOpts = contacts.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+  let html = sec('Call Notes / Transcript', `<div style="display:flex;flex-direction:column;gap:11px">
     <textarea id="dNotesTA" class="inp" rows="6" placeholder="Paste your call notes or a transcript…" oninput="dNotes=this.value">${dNotes}</textarea>
-    ${contacts.length>0?`<div style="display:flex;align-items:center;gap:10px"><span style="font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:1px;font-family:'Inter',system-ui,sans-serif">Update Contact</span><select id="dContactSel" style="background:#fff;border:1px solid #e0dbd4;border-radius:3px;color:#888;font-size:13px;padding:5px 10px;outline:none;font-family:'Inter',system-ui,sans-serif"><option value="">None</option>${contactOpts}</select></div>`:''}
+    ${contacts.length>0 ? `<div style="display:flex;align-items:center;gap:10px"><span style="font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:1px;font-family:'Inter',system-ui,sans-serif">Update Contact</span><select id="dContactSel" style="background:#fff;border:1px solid #e0dbd4;border-radius:3px;color:#888;font-size:13px;padding:5px 10px;outline:none;font-family:'Inter',system-ui,sans-serif"><option value="">None</option>${contactOpts}</select></div>` : ''}
     <button id="debriefBtn" class="primary-btn" onclick="genDebrief()" ${!dNotes.trim()?'disabled':''}>Generate Debrief</button>
   </div>`);
-  if(dRes){
-    const sc=dRes.rapportScore,scCol=sc>=7?'#16803d':sc>=5?'#d97706':'#c0392b';
-    html+=sec('Rapport Score',`<div style="display:flex;align-items:center;gap:18px"><div style="font-size:46px;font-weight:700;color:${scCol};font-family:'Georgia',serif">${sc}<span style="font-size:20px;color:#ccc">/10</span></div><div style="font-size:14px;color:#555;line-height:1.6;font-family:'Inter',system-ui,sans-serif">${dRes.rapportNote}</div></div>`);
-    if(dRes.painUncovered)html+=sec('Pain Uncovered',`<div style="font-size:14px;color:#555;line-height:1.7;font-family:'Inter',system-ui,sans-serif">${dRes.painUncovered}</div>`);
-    html+=sec('What They Really Meant',`<div style="font-size:17px;color:#1a2340;line-height:1.7;font-family:'Georgia',serif;font-style:italic">"${dRes.whatTheyReallyMeant}"</div>`);
-    html+=sec('Missed Moments',pills((dRes.missedMoments||[]).map(m=>'→ '+m)));
-    html+=sec('Trust Builders · Trust Breakers',`<div style="display:flex;flex-direction:column;gap:6px">${(dRes.trustBuilders||[]).map(m=>`<div class="trust-good">+ ${m}</div>`).join('')}${(dRes.trustBreakers||[]).map(m=>`<div class="trust-bad">− ${m}</div>`).join('')}</div>`);
-    html+=sec('Your Blind Spots',pills(dRes.blindSpots||[]));
-    html+=sec('Conversation Type Shifts',`<div style="font-size:14px;color:#555;line-height:1.7;font-family:'Inter',system-ui,sans-serif">${dRes.conversationTypeShifts}</div>`);
-    html+=sec('Next Time',pills((dRes.nextTimeActions||[]).map((a,i)=>`${i+1}. ${a}`)));
-    html+=sec('Open Next Call With',`<div style="display:flex;flex-direction:column;gap:11px">${(dRes.followUpQuestions||[]).map((q,i)=>`<div style="display:flex;align-items:flex-start;gap:9px"><span style="color:#ef5223;margin-top:2px;font-size:16px">→</span><div style="font-size:16px;color:#1a2340;line-height:1.6;font-family:'Georgia',serif;font-style:italic">${q}<button id="cpbtn_dq${i}" onclick="copyQ('${escQ(q)}','_dq${i}')" style="margin-left:10px;background:none;font-size:12px;color:#bbb;font-family:'Inter',system-ui,sans-serif;vertical-align:middle">copy</button></div></div>`).join('')}</div>`);
+  if (dRes) {
+    const sc=dRes.rapportScore, scCol=sc>=7?'#16803d':sc>=5?'#d97706':'#c0392b';
+    html += sec('Rapport Score', `<div style="display:flex;align-items:center;gap:18px"><div style="font-size:46px;font-weight:700;color:${scCol};font-family:'Georgia',serif">${sc}<span style="font-size:20px;color:#ccc">/10</span></div><div style="font-size:14px;color:#555;line-height:1.6;font-family:'Inter',system-ui,sans-serif">${dRes.rapportNote}</div></div>`);
+    if (dRes.painUncovered) html += sec('Pain Uncovered', `<div style="font-size:14px;color:#555;line-height:1.7;font-family:'Inter',system-ui,sans-serif">${dRes.painUncovered}</div>`);
+    html += sec('What They Really Meant', `<div style="font-size:17px;color:#1a2340;line-height:1.7;font-family:'Georgia',serif;font-style:italic">"${dRes.whatTheyReallyMeant}"</div>`);
+    html += sec('Missed Moments', pills((dRes.missedMoments||[]).map(m=>'→ '+m)));
+    html += sec('Trust Builders · Trust Breakers', `<div style="display:flex;flex-direction:column;gap:6px">${(dRes.trustBuilders||[]).map(m=>`<div class="trust-good">+ ${m}</div>`).join('')}${(dRes.trustBreakers||[]).map(m=>`<div class="trust-bad">− ${m}</div>`).join('')}</div>`);
+    html += sec('Your Blind Spots', pills(dRes.blindSpots||[]));
+    html += sec('Conversation Type Shifts', `<div style="font-size:14px;color:#555;line-height:1.7;font-family:'Inter',system-ui,sans-serif">${dRes.conversationTypeShifts}</div>`);
+    html += sec('Next Time', pills((dRes.nextTimeActions||[]).map((a,i)=>`${i+1}. ${a}`)));
+    html += sec('Open Next Call With', `<div style="display:flex;flex-direction:column;gap:11px">${(dRes.followUpQuestions||[]).map((q,i)=>`<div style="display:flex;align-items:flex-start;gap:9px"><span style="color:#ef5223;font-size:16px">→</span><div style="font-size:16px;color:#1a2340;line-height:1.6;font-family:'Georgia',serif;font-style:italic">${q}<button id="cpbtn_dq${i}" onclick="copyQ('${escQ(q)}','_dq${i}')" style="margin-left:10px;background:none;font-size:12px;color:#bbb;font-family:'Inter',system-ui,sans-serif;vertical-align:middle">copy</button></div></div>`).join('')}</div>`);
   }
   return html;
 }
 
-function renderContacts(){
-  let html=`<div style="display:flex;align-items:center;justify-content:space-between"><div style="font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:2px;font-family:'Inter',system-ui,sans-serif">Relationship Memory</div><button onclick="showCF=true;editCId=null;cfN='';cfR='';cfS='';cfNt='';render()" class="primary-btn" style="padding:8px 18px;font-size:13px">+ Add Contact</button></div>`;
-  if(showCF)html+=sec(editCId?'Edit Contact':'New Contact',`<div style="display:flex;flex-direction:column;gap:11px"><input id="cfNI" class="inp" value="${cfN.replace(/"/g,'&quot;')}" placeholder="Name *"/><input id="cfRI" class="inp" value="${cfR.replace(/"/g,'&quot;')}" placeholder="Role / company"/><input id="cfSI" class="inp" value="${cfS.replace(/"/g,'&quot;')}" placeholder="Communication style"/><textarea id="cfNtI" class="inp" rows="3" placeholder="Key notes…">${cfNt}</textarea><div style="display:flex;gap:9px"><button class="primary-btn" onclick="saveCF()">${editCId?'Save Changes':'Save Contact'}</button><button onclick="cancelCF()" style="padding:13px 18px;border-radius:3px;border:1px solid #e0dbd4;background:#fff;color:#888;font-family:'Inter',system-ui,sans-serif;font-size:14px">Cancel</button></div></div>`);
-  if(!contacts.length&&!showCF)html+=`<div style="padding:36px;text-align:center;color:#ccc;font-family:'Inter',system-ui,sans-serif">No contacts yet.</div>`;
-  contacts.forEach(c=>{html+=`<div class="sec"><div style="display:flex;align-items:flex-start;justify-content:space-between"><div><div style="font-size:18px;font-weight:600;color:#1a2340;font-family:'Georgia',serif">${c.name}</div>${c.role?`<div style="font-size:13px;color:#aaa;margin-top:2px;font-family:'Inter',system-ui,sans-serif">${c.role}</div>`:''}</div><div style="display:flex;gap:12px"><button onclick="startEdit(${c.id})" style="background:none;color:#aaa;font-size:13px;font-family:'Inter',system-ui,sans-serif">Edit</button><button onclick="deleteContact(${c.id})" style="background:none;color:#ddd;font-size:18px">&times;</button></div></div>${c.style?`<div style="font-size:13px;color:#ef5223;font-family:'Inter',system-ui,sans-serif;margin-top:6px">${c.style}</div>`:''}${c.notes?`<div style="font-size:13px;color:#888;line-height:1.6;font-family:'Inter',system-ui,sans-serif;margin-top:5px">${c.notes}</div>`:''}${c.lastCall?`<div style="font-size:12px;color:#ccc;margin-top:5px;font-family:'Inter',system-ui,sans-serif">Last call: ${c.lastCall}</div>`:''}</div>`;});
+function renderContacts() {
+  let html = `<div style="display:flex;align-items:center;justify-content:space-between"><div style="font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:2px;font-family:'Inter',system-ui,sans-serif">Relationship Memory</div><button onclick="showCF=true;editCId=null;cfN='';cfR='';cfS='';cfNt='';render()" class="primary-btn" style="padding:8px 18px;font-size:13px">+ Add Contact</button></div>`;
+  if (showCF) html += sec(editCId?'Edit Contact':'New Contact', `<div style="display:flex;flex-direction:column;gap:11px"><input id="cfNI" class="inp" value="${cfN.replace(/"/g,'&quot;')}" placeholder="Name *"/><input id="cfRI" class="inp" value="${cfR.replace(/"/g,'&quot;')}" placeholder="Role / company"/><input id="cfSI" class="inp" value="${cfS.replace(/"/g,'&quot;')}" placeholder="Communication style"/><textarea id="cfNtI" class="inp" rows="3" placeholder="Key notes…">${cfNt}</textarea><div style="display:flex;gap:9px"><button class="primary-btn" onclick="saveCF()">${editCId?'Save Changes':'Save Contact'}</button><button onclick="cancelCF()" style="padding:13px 18px;border-radius:3px;border:1px solid #e0dbd4;background:#fff;color:#888;font-family:'Inter',system-ui,sans-serif;font-size:14px">Cancel</button></div></div>`);
+  if (!contacts.length && !showCF) html += `<div style="padding:36px;text-align:center;color:#ccc;font-family:'Inter',system-ui,sans-serif">No contacts yet.</div>`;
+  contacts.forEach(c => { html += `<div class="sec"><div style="display:flex;align-items:flex-start;justify-content:space-between"><div><div style="font-size:18px;font-weight:600;color:#1a2340;font-family:'Georgia',serif">${c.name}</div>${c.role?`<div style="font-size:13px;color:#aaa;margin-top:2px;font-family:'Inter',system-ui,sans-serif">${c.role}</div>`:''}</div><div style="display:flex;gap:12px"><button onclick="startEdit(${c.id})" style="background:none;color:#aaa;font-size:13px;font-family:'Inter',system-ui,sans-serif">Edit</button><button onclick="deleteContact(${c.id})" style="background:none;color:#ddd;font-size:18px">&times;</button></div></div>${c.style?`<div style="font-size:13px;color:#ef5223;font-family:'Inter',system-ui,sans-serif;margin-top:6px">${c.style}</div>`:''}${c.notes?`<div style="font-size:13px;color:#888;line-height:1.6;font-family:'Inter',system-ui,sans-serif;margin-top:5px">${c.notes}</div>`:''}${c.lastCall?`<div style="font-size:12px;color:#ccc;margin-top:5px;font-family:'Inter',system-ui,sans-serif">Last call: ${c.lastCall}</div>`:''}</div>`; });
   return html;
 }
 
-function renderFavorites(){
-  let html=`<div style="font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:2px;font-family:'Inter',system-ui,sans-serif">Saved Questions</div>`;
-  if(!favorites.length)return html+`<div style="padding:36px;text-align:center;color:#ccc;font-family:'Inter',system-ui,sans-serif">Star questions to save them here.</div>`;
-  favorites.forEach((q,i)=>{const st=TYPE_COLORS[q.type]||TYPE_COLORS['Practical'];const cv=CONTEXTS[q.ctx];html+=`<div class="qcard"><div style="display:flex;align-items:center;gap:7px;margin-bottom:10px"><span style="font-size:11px;font-weight:700;color:${st.accent};text-transform:uppercase;letter-spacing:1.5px;font-family:'Inter',system-ui,sans-serif">${q.type}</span>${cv?`<span style="font-size:11px;padding:2px 9px;border-radius:2px;background:#ef522318;color:#ef5223;font-weight:600;font-family:'Inter',system-ui,sans-serif">${q.ctx}</span>`:''}<div style="flex:1;height:1px;background:#f0ece6"></div><button id="cpbtn_fv${i}" onclick="copyQ('${escQ(q.question)}','_fv${i}')" style="background:none;font-size:12px;color:#bbb;font-family:'Inter',system-ui,sans-serif">copy</button><button onclick="deleteFavByIdx(${i})" style="background:none;color:#ddd;font-size:18px">&times;</button></div><div style="font-size:17px;color:#1a2340;line-height:1.6;font-family:'Georgia',serif;font-style:italic">"${q.question}"</div>${q.why?`<div style="font-size:12px;color:#aaa;margin-top:10px;line-height:1.5;font-family:'Inter',system-ui,sans-serif;border-top:1px solid #f5f2ed;padding-top:10px">${q.why}</div>`:''}</div>`;});
-  html+=`<button onclick="clearFavs()" style="font-size:12px;color:#ccc;background:none;border:none;cursor:pointer;font-family:'Inter',system-ui,sans-serif">Clear all</button>`;
+function renderFavorites() {
+  let html = `<div style="font-size:11px;color:#aaa;text-transform:uppercase;letter-spacing:2px;font-family:'Inter',system-ui,sans-serif">Saved Questions</div>`;
+  if (!favorites.length) return html + `<div style="padding:36px;text-align:center;color:#ccc;font-family:'Inter',system-ui,sans-serif">Star questions to save them here.</div>`;
+  favorites.forEach((q,i) => {
+    const st = TYPE_COLORS[q.type] || TYPE_COLORS['Practical'];
+    const cv = CONTEXTS[q.ctx];
+    html += `<div class="qcard"><div style="display:flex;align-items:center;gap:7px;margin-bottom:10px"><span style="font-size:11px;font-weight:700;color:${st.accent};text-transform:uppercase;letter-spacing:1.5px;font-family:'Inter',system-ui,sans-serif">${q.type}</span>${cv?`<span style="font-size:11px;padding:2px 9px;border-radius:2px;background:#ef522318;color:#ef5223;font-weight:600;font-family:'Inter',system-ui,sans-serif">${q.ctx}</span>`:''}<div style="flex:1;height:1px;background:#f0ece6"></div><button id="cpbtn_fv${i}" onclick="copyQ('${escQ(q.question)}','_fv${i}')" style="background:none;font-size:12px;color:#bbb;font-family:'Inter',system-ui,sans-serif">copy</button><button onclick="deleteFavByIdx(${i})" style="background:none;color:#ddd;font-size:18px">&times;</button></div><div style="font-size:17px;color:#1a2340;line-height:1.6;font-family:'Georgia',serif;font-style:italic">"${q.question}"</div>${q.why?`<div style="font-size:12px;color:#aaa;margin-top:10px;line-height:1.5;font-family:'Inter',system-ui,sans-serif;border-top:1px solid #f5f2ed;padding-top:10px">${q.why}</div>`:''}</div>`;
+  });
+  html += `<button onclick="clearFavs()" style="font-size:12px;color:#ccc;background:none;border:none;cursor:pointer;font-family:'Inter',system-ui,sans-serif">Clear all</button>`;
   return html;
 }
 
-function render(){
-  document.getElementById('tabBar').innerHTML=TABS.map(t=>{const badge=(t==='Favorites'&&favorites.length>0)?` (${favorites.length})`:(t==='Contacts'&&contacts.length>0)?` (${contacts.length})`:'';return`<button onclick="activeTab='${t}';render()" style="padding:11px 18px;background:none;border:none;border-bottom:${activeTab===t?'2.5px solid #ef5223':'2.5px solid transparent'};color:${activeTab===t?'#ef5223':'rgba(255,255,255,.45)'};font-size:14px;font-weight:${activeTab===t?700:400};white-space:nowrap;font-family:'Inter',system-ui,sans-serif;letter-spacing:.2px">${t}${badge}</button>`;}).join('');
-  const mc=document.getElementById('mainContent');
-  const renderers={Listen:renderListen,Prep:renderPrep,Debrief:renderDebrief,Contacts:renderContacts,Favorites:renderFavorites};
-  mc.innerHTML=`<div style="display:flex;flex-direction:column;gap:15px">${(renderers[activeTab]||renderListen)()}</div>`;
-  if(logoDataUrl)applyLogo();
+function render() {
+  document.getElementById('tabBar').innerHTML = TABS.map(t => {
+    const badge = (t==='Favorites'&&favorites.length>0) ? ` (${favorites.length})` : (t==='Contacts'&&contacts.length>0) ? ` (${contacts.length})` : '';
+    return `<button onclick="activeTab='${t}';render()" style="padding:11px 18px;background:none;border:none;border-bottom:${activeTab===t?'2.5px solid #ef5223':'2.5px solid transparent'};color:${activeTab===t?'#ef5223':'rgba(255,255,255,.45)'};font-size:14px;font-weight:${activeTab===t?700:400};white-space:nowrap;font-family:'Inter',system-ui,sans-serif">${t}${badge}</button>`;
+  }).join('');
+  const renderers = {Listen:renderListen, Prep:renderPrep, Debrief:renderDebrief, Contacts:renderContacts, Favorites:renderFavorites};
+  document.getElementById('mainContent').innerHTML = `<div style="display:flex;flex-direction:column;gap:15px">${(renderers[activeTab]||renderListen)()}</div>`;
   updateMicUI();
+  updateGenBtn();
 }
 
 initSpeech();
-if(logoDataUrl)setTimeout(applyLogo,50);
-if(!API_KEY) setTimeout(()=>document.getElementById('keyModal').style.display='flex', 300);
+if (!API_KEY) setTimeout(() => document.getElementById('keyModal').style.display='flex', 300);
 render();
 </script>
 </body>
